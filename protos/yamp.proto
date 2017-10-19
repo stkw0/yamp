@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package yamp;
+
+service Server {
+   
+}
+
