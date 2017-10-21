@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 #include <grpc++/grpc++.h>
@@ -11,9 +12,10 @@ using grpc::Status;
 using yamp::HelloRequest;
 using yamp::HelloReply;
 
-class GreeterServiceImpl final : public yamp::Server::Service {
+class GreeterServiceImpl final : public yamp::Greeter::Service {
    Status SayHello(ServerContext* context, const HelloRequest* request, HelloReply* reply) override {
       std::string prefix("Hello ");
+      std::cout << request->name() << std::endl;
       reply->set_message(prefix + request->name());
       return Status::OK;
    }
