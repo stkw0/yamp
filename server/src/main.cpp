@@ -3,44 +3,35 @@
 
 #include <spdlog/spdlog.h>
 
-#include <grpc++/grpc++.h>
+#include "config.h"
+#include "manager.h"
 
-#include "yamp.grpc.pb.h"
-
-using grpc::Server;
-using grpc::ServerBuilder;
-using grpc::ServerContext;
-using grpc::Status;
-using yamp::HelloReply;
-using yamp::HelloRequest;
-
-class GreeterServiceImpl final : public yamp::Greeter::Service {
-    Status SayHello(ServerContext* context, const HelloRequest* request,
-                    HelloReply* reply) override {
-        std::string prefix("Hello ");
-        std::cout << request->name() << std::endl;
-        reply->set_message(prefix + request->name());
-        return Status::OK;
-    }
-};
-
-void RunServer() {
-    std::string server_address("0.0.0.0:50051");
-    GreeterServiceImpl service;
-
-    ServerBuilder builder;
-    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-    builder.RegisterService(&service);
-
-    std::unique_ptr<Server> server(builder.BuildAndStart());
-    std::cout << "Server listening on " << server_address << std::endl;
-
-    // Wait for the server to shutdown. Note that some other thread must be
-    // responsible for shutting down the server for this call to ever return.
-    server->Wait();
-}
-
-int main() {
+int main(int argc, char* argv[]) try {
     auto logging = spdlog::stdout_color_mt("global");
-    RunServer();
+    logging->set_level(spdlog::level::trace);
+
+    // Check if we have some pid number
+    std::ifstream ipid_file(Config().getPidFile());
+    if(ipid_file.is_open()) {
+
+        std::string pid;
+        ipid_file >> pid;
+
+        // Check if that pid is a real process
+        std::ifstream f("/proc/" + pid + "/comm");
+        if(f.is_open()) {
+            std::string comm;
+            f >> comm;
+            if(comm == "yampd") {
+                throw std::runtime_error("Server is already running");
+            }
+        }
+    }
+
+    logging->info("Starting server");
+
+    Manager manager(argc, argv);
+    manager.StartServer();
+} catch(std::exception& e) {
+    spdlog::get("global")->critical(e.what());
 }

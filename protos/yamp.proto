@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package yamp;
 
-service Greeter {
+service Server {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
 }
