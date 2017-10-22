@@ -7,6 +7,7 @@
 
 using grpc::ServerContext;
 using yamp::Null;
+using yamp::Artist;
 
 class CommandsImpl final : public yamp::Server::Service {
 public:
@@ -14,7 +15,8 @@ public:
 
 private:
     grpc::Status Play(ServerContext* c, const Null* request, Null* reply) override;
-    grpc::Status Pause(ServerContext* c, const Null*request, Null* reply) override;
+    grpc::Status Pause(ServerContext* c, const Null* request, Null* reply) override;
+    grpc::Status GetArtist(ServerContext* c, const Null* request, Artist* reply) override;
    private:
    	Music& music;
 };

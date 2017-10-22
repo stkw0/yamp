@@ -5,9 +5,12 @@ cd client  || exit
 export GOPATH=$GOPATH:$(pwd)
 go build
 )&
+PID=$!
 
 mkdir -p build
 cd build || exit
 cmake ..
 make -j8
+
+wait $PID
 

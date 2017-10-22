@@ -6,9 +6,14 @@ service Server {
   // Sends a greeting
   rpc Play(Null) returns (Null);
   rpc Pause(Null) returns (Null);
+  rpc GetArtist(Null) returns (Artist);
 }
 
 message Null {
+}
+
+message Artist {
+	string artist = 1;
 }
 
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -13,9 +14,9 @@ const (
 	address = "localhost:6600"
 )
 
-func check(i interface{}, err error) {
+func check(err error) {
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		log.Fatalf("Error: %v", err)
 	}
 }
 
@@ -36,8 +37,14 @@ func main() {
 
 	switch os.Args[1] {
 	case "P":
-		check(c.Play(b, &pb.Null{}))
+		_, err = c.Play(b, &pb.Null{})
+		check(err)
 	case "p":
-		c.Pause(b, &pb.Null{})
+		_, err = c.Pause(b, &pb.Null{})
+		check(err)
+	case "a":
+		response, _ := c.GetArtist(b, &pb.Null{})
+		check(err)
+		fmt.Println(response.Artist)
 	}
 }

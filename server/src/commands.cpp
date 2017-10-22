@@ -17,3 +17,9 @@ grpc::Status CommandsImpl::Pause(ServerContext* c, const Null* request, Null* re
     }
     return grpc::Status::OK;
 }
+
+grpc::Status CommandsImpl::GetArtist(ServerContext* c, const Null* request, Artist* reply) {
+    auto artist = music.GetCurrent().GetArtist();
+    reply->set_artist(artist);
+    return grpc::Status::OK;
+}
