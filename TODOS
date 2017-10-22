@@ -1,0 +1,4 @@
+# Compilar el cliente a traves de cmake
+# Añadir modulos para detectar taglib 
+# Arreglar la detección de sfml (no setea los ldflags)
+# Parsear config cliente

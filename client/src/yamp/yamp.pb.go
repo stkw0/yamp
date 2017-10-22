@@ -9,8 +9,6 @@ It is generated from these files:
 
 It has these top-level messages:
 	Null
-	HelloRequest
-	HelloReply
 */
 package yamp
 
@@ -42,44 +40,8 @@ func (m *Null) String() string            { return proto.CompactTextString(m) }
 func (*Null) ProtoMessage()               {}
 func (*Null) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
-// The request message containing the user's name.
-type HelloRequest struct {
-	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
-}
-
-func (m *HelloRequest) Reset()                    { *m = HelloRequest{} }
-func (m *HelloRequest) String() string            { return proto.CompactTextString(m) }
-func (*HelloRequest) ProtoMessage()               {}
-func (*HelloRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
-
-func (m *HelloRequest) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-// The response message containing the greetings
-type HelloReply struct {
-	Message string `protobuf:"bytes,1,opt,name=message" json:"message,omitempty"`
-}
-
-func (m *HelloReply) Reset()                    { *m = HelloReply{} }
-func (m *HelloReply) String() string            { return proto.CompactTextString(m) }
-func (*HelloReply) ProtoMessage()               {}
-func (*HelloReply) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
-
-func (m *HelloReply) GetMessage() string {
-	if m != nil {
-		return m.Message
-	}
-	return ""
-}
-
 func init() {
 	proto.RegisterType((*Null)(nil), "yamp.Null")
-	proto.RegisterType((*HelloRequest)(nil), "yamp.HelloRequest")
-	proto.RegisterType((*HelloReply)(nil), "yamp.HelloReply")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -94,8 +56,8 @@ const _ = grpc.SupportPackageIsVersion4
 
 type ServerClient interface {
 	// Sends a greeting
-	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 	Play(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
+	Pause(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
 }
 
 type serverClient struct {
@@ -104,15 +66,6 @@ type serverClient struct {
 
 func NewServerClient(cc *grpc.ClientConn) ServerClient {
 	return &serverClient{cc}
-}
-
-func (c *serverClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {
-	out := new(HelloReply)
-	err := grpc.Invoke(ctx, "/yamp.Server/SayHello", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *serverClient) Play(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error) {
@@ -124,34 +77,25 @@ func (c *serverClient) Play(ctx context.Context, in *Null, opts ...grpc.CallOpti
 	return out, nil
 }
 
+func (c *serverClient) Pause(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error) {
+	out := new(Null)
+	err := grpc.Invoke(ctx, "/yamp.Server/Pause", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Server service
 
 type ServerServer interface {
 	// Sends a greeting
-	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
 	Play(context.Context, *Null) (*Null, error)
+	Pause(context.Context, *Null) (*Null, error)
 }
 
 func RegisterServerServer(s *grpc.Server, srv ServerServer) {
 	s.RegisterService(&_Server_serviceDesc, srv)
-}
-
-func _Server_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServerServer).SayHello(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/yamp.Server/SayHello",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServerServer).SayHello(ctx, req.(*HelloRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Server_Play_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -172,17 +116,35 @@ func _Server_Play_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_Pause_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).Pause(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/yamp.Server/Pause",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).Pause(ctx, req.(*Null))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Server_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "yamp.Server",
 	HandlerType: (*ServerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SayHello",
-			Handler:    _Server_SayHello_Handler,
-		},
-		{
 			MethodName: "Play",
 			Handler:    _Server_Play_Handler,
+		},
+		{
+			MethodName: "Pause",
+			Handler:    _Server_Pause_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -192,16 +154,11 @@ var _Server_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("protos/yamp.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 165 bytes of a gzipped FileDescriptorProto
+	// 96 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2c, 0x28, 0xca, 0x2f,
 	0xc9, 0x2f, 0xd6, 0xaf, 0x4c, 0xcc, 0x2d, 0xd0, 0x03, 0xb3, 0x85, 0x58, 0x40, 0x6c, 0x25, 0x36,
-	0x2e, 0x16, 0xbf, 0xd2, 0x9c, 0x1c, 0x25, 0x25, 0x2e, 0x1e, 0x8f, 0xd4, 0x9c, 0x9c, 0xfc, 0xa0,
-	0xd4, 0xc2, 0xd2, 0xd4, 0xe2, 0x12, 0x21, 0x21, 0x2e, 0x96, 0xbc, 0xc4, 0xdc, 0x54, 0x09, 0x46,
-	0x05, 0x46, 0x0d, 0xce, 0x20, 0x30, 0x5b, 0x49, 0x8d, 0x8b, 0x0b, 0xaa, 0xa6, 0x20, 0xa7, 0x52,
-	0x48, 0x82, 0x8b, 0x3d, 0x37, 0xb5, 0xb8, 0x38, 0x31, 0x1d, 0xa6, 0x08, 0xc6, 0x35, 0x8a, 0xe1,
-	0x62, 0x0b, 0x4e, 0x2d, 0x2a, 0x4b, 0x2d, 0x12, 0x32, 0xe2, 0xe2, 0x08, 0x4e, 0xac, 0x04, 0x6b,
-	0x12, 0x12, 0xd2, 0x03, 0x5b, 0x8e, 0x6c, 0x8b, 0x94, 0x00, 0x8a, 0x58, 0x41, 0x4e, 0xa5, 0x12,
-	0x83, 0x90, 0x1c, 0x17, 0x4b, 0x40, 0x4e, 0x62, 0xa5, 0x10, 0x17, 0x44, 0x0e, 0xe4, 0x3a, 0x29,
-	0x24, 0x76, 0x12, 0x1b, 0xd8, 0xf9, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x17, 0xee, 0x0c,
-	0xf1, 0xd3, 0x00, 0x00, 0x00,
+	0x2e, 0x16, 0xbf, 0xd2, 0x9c, 0x1c, 0x23, 0x4f, 0x2e, 0xb6, 0xe0, 0xd4, 0xa2, 0xb2, 0xd4, 0x22,
+	0x21, 0x39, 0x2e, 0x96, 0x80, 0x9c, 0xc4, 0x4a, 0x21, 0x2e, 0x3d, 0xb0, 0x62, 0x90, 0xac, 0x14,
+	0x12, 0x5b, 0x48, 0x9e, 0x8b, 0x35, 0x20, 0xb1, 0xb4, 0x38, 0x15, 0x97, 0x82, 0x24, 0x36, 0xb0,
+	0xf9, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x44, 0x94, 0xb3, 0x15, 0x74, 0x00, 0x00, 0x00,
 }
