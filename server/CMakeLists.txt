@@ -1,5 +1,6 @@
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(SFML 2 REQUIRED SYSTEM AUDIO)
 find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
 # TODO: Next upstream version will support it
@@ -26,10 +27,11 @@ add_executable(yampd
 )
 
 target_link_libraries(yampd
-	boost_system boost_filesystem
+	  boost_system boost_filesystem
+    sfml-system sfml-audio
     gRPC::grpc++_reflection
     protobuf::libprotobuf
-    yaml-cpp
+    yaml-cpp mpg123 tag
 )
 
 

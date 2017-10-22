@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -10,8 +9,7 @@ import (
 )
 
 const (
-	address     = "localhost:50051"
-	defaultName = "world"
+	address = "localhost:6600"
 )
 
 func main() {
@@ -24,13 +22,8 @@ func main() {
 	c := pb.NewServerClient(conn)
 
 	// Contact the server and print out its response.
-	name := defaultName
-	if len(os.Args) > 1 {
-		name = os.Args[1]
-	}
-	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name})
+	_, err = c.Play(context.Background(), &pb.Null{})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	log.Printf("Greeting: %s", r.Message)
 }

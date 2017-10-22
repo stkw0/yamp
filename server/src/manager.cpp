@@ -5,13 +5,19 @@
 #include <thread>
 
 #include <boost/filesystem.hpp>
+#include <fmt/format.h>
+#include <grpc++/grpc++.h>
 #include <spdlog/spdlog.h>
 
 #include "commands.h"
 #include "manager.h"
+#include "music.h"
 #include "utils.h"
 
+using namespace fmt::literals;
 using namespace boost::filesystem;
+using grpc::Server;
+using grpc::ServerBuilder;
 
 // Public functions
 
@@ -45,19 +51,29 @@ Manager::~Manager() {
 }
 
 void Manager::StartServer() {
-    // Music music;
+    // Start Music thread
+    Music music;
 
-    // music.GetList().LoadDir(conf.GetDir());
-    // std::thread mplayer([&music] { music.PlayList(); });
+    music.GetList().LoadDir(conf.GetDir());
+    std::thread mplayer([&music] { music.PlayList(); });
 
-    // CommandControler cmd(music);
+    // Start server
+    auto server_address = "{}:{}"_format(conf.getBindAddress(), conf.getPortNumber());
+    CommandsImpl service(music);
 
-    // ExecuteScript("init.sh");
+    ServerBuilder builder;
+    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+    builder.RegisterService(&service);
 
-    RunServer();
-    // mplayer.join();
+    std::unique_ptr<Server> server(builder.BuildAndStart());
+    spdlog::get("global")->info("Server listening on {}", server_address);
 
-    // ExecuteScript("exit.sh");
+    ExecuteScript("init.sh");
+
+    mplayer.join();
+    server->Shutdown();
+
+    ExecuteScript("exit.sh");
 }
 
 // Private Functions

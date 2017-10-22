@@ -2,18 +2,23 @@
 
 #include <grpc++/grpc++.h>
 
+#include "music.h"
 #include "yamp.grpc.pb.h"
 
-using grpc::Server;
-using grpc::ServerBuilder;
 using grpc::ServerContext;
-using grpc::Status;
 using yamp::HelloReply;
 using yamp::HelloRequest;
-
-void RunServer();
+using yamp::Null;
 
 class CommandsImpl final : public yamp::Server::Service {
-    Status SayHello(ServerContext* context, const HelloRequest* request,
+public:
+	CommandsImpl(Music& c) : music(c) {}
+
+private:
+    grpc::Status SayHello(ServerContext* context, const HelloRequest* request,
                     HelloReply* reply) override;
+
+    grpc::Status Play(ServerContext* context, const Null* request, Null* reply) override;
+   private:
+   	Music& music;
 };
