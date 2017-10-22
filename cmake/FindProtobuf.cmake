@@ -122,10 +122,13 @@ function(PROTOBUF_GENERATE_GO SRCS DEST)
     add_custom_command(
       OUTPUT "${DEST}/${FIL_WE}.pb.go"
       COMMAND protobuf::protoc
-      ARGS --go_out ${DEST} ${_protobuf_include_path} ${ABS_FIL}
+      ARGS --go_out=plugins=grpc:${DEST} --proto_path ${DEST} ${_protobuf_include_path} ${ABS_FIL}
       DEPENDS ${ABS_FIL} protobuf::protoc
       COMMENT "Running Go protocol buffer compiler on ${FIL}"
       VERBATIM )
+
+    # Workaround. I don't know why without this it doesn't run
+    add_custom_target(run ALL DEPENDS "${DEST}/${FIL_WE}.pb.go")
   endforeach()
 
   set_source_files_properties(${${SRCS}} PROPERTIES GENERATED TRUE)
