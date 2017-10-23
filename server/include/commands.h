@@ -10,6 +10,7 @@ using yamp::Null;
 using yamp::Artist;
 using yamp::Title;
 using yamp::File;
+using yamp::Volume;
 
 class CommandsImpl final : public yamp::Server::Service {
 public:
@@ -29,6 +30,10 @@ private:
     // Sort commands
     grpc::Status SortRandom(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status SortLLF(ServerContext* c, const Null* request, Null* reply) override;
+
+    // Volume commands
+    grpc::Status VolumeGet(ServerContext* c, const Null* request, Volume* reply) override;
+    grpc::Status VolumeSet(ServerContext* c, const Volume* request, Null* reply) override;
 
    private:
    	Music& music;

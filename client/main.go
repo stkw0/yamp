@@ -1,11 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
-	"context"
 	"google.golang.org/grpc"
 	pb "yamp"
 )
@@ -17,6 +18,46 @@ const (
 func check(err error) {
 	if err != nil {
 		log.Fatalf("Error: %v", err)
+	}
+}
+
+func parseVolumeSetCmd(b context.Context, c pb.ServerClient, cmd string) {
+	if len(cmd) == 0 {
+		log.Fatal("A sub-option is required")
+	}
+
+	f, err := strconv.ParseFloat(os.Args[2][1:], 32)
+	check(err)
+
+	switch cmd[0] {
+	case '-':
+		_, err := c.VolumeSet(b, &pb.Volume{Volume: float32(f)})
+		check(err)
+	case '+':
+		_, err := c.VolumeSet(b, &pb.Volume{Volume: float32(f)})
+		check(err)
+	default:
+		f, err = strconv.ParseFloat(os.Args[2], 32)
+		check(err)
+		_, err := c.VolumeSet(b, &pb.Volume{Volume: float32(f), ActionType: pb.Volume_SET})
+		check(err)
+	}
+}
+
+func parseVolumeCmd(b context.Context, c pb.ServerClient, cmd string) {
+	if len(cmd) == 0 {
+		log.Fatal("A sub-option is required")
+	}
+
+	switch cmd[0] {
+	case 'g':
+		response, err := c.VolumeGet(b, &pb.Null{})
+		check(err)
+		fmt.Println(response.Volume)
+	case 's':
+		parseVolumeSetCmd(b, c, os.Args[2])
+	default:
+		log.Fatal("Invalid command")
 	}
 }
 
@@ -78,6 +119,8 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 		parseGetMetadataCmd(b, c, cmd[1:])
 	case 's':
 		parseSortCmd(b, c, cmd[1:])
+	case 'v':
+		parseVolumeCmd(b, c, cmd[1:])
 	default:
 		log.Fatal("Invalid command")
 	}

@@ -17,6 +17,10 @@ service Server {
   // Sort commands
   rpc SortRandom(Null) returns (Null);
   rpc SortLLF(Null) returns (Null);
+
+  // Volume commands
+  rpc VolumeGet(Null) returns (Volume);
+  rpc VolumeSet(Volume) returns (Null);
 }
 
 message Null {
@@ -32,6 +36,18 @@ message Title {
 
 message File {
 	string file = 1;
+}
+
+message Volume {
+	float volume = 1;
+	enum Type {
+		GET = 0;
+		SET = 1;
+		INCREASE = 2;
+		DECREASE = 3;
+	};
+
+	Type action_type = 2;
 }
 
 

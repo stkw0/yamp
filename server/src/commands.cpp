@@ -59,3 +59,22 @@ grpc::Status CommandsImpl::SortLLF(ServerContext* c, const Null* request, Null* 
     music.GetList().Sort(Order::LLF);
     return grpc::Status::OK;
 }
+
+// Volume commands
+
+grpc::Status CommandsImpl::VolumeGet(ServerContext* c, const Null* request, Volume* reply) {
+    reply->set_volume(music.GetVolume());
+    return grpc::Status::OK;
+}
+
+grpc::Status CommandsImpl::VolumeSet(ServerContext* c, const Volume* request, Null* reply) {
+    auto v = request->volume();
+    auto t = request->action_type();
+    switch(t) {
+    // TODO
+    case yamp::Volume_Type_GET:
+        break;
+    }
+    std::cout << t << std::endl;
+    return grpc::Status::OK;
+}
