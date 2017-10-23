@@ -41,12 +41,11 @@ message File {
 message Volume {
 	float volume = 1;
 	enum Type {
-		GET = 0;
-		SET = 1;
-		INCREASE = 2;
-		DECREASE = 3;
+		SET = 0;
+		INCREASE = 1;
+		DECREASE = 2;
 	};
-
+	// Only makes sends when setting (also, it sucks)
 	Type action_type = 2;
 }
 

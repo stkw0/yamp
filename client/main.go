@@ -26,14 +26,15 @@ func parseVolumeSetCmd(b context.Context, c pb.ServerClient, cmd string) {
 		log.Fatal("A sub-option is required")
 	}
 
-	f, err := strconv.ParseFloat(os.Args[2][1:], 32)
-	check(err)
-
 	switch cmd[0] {
 	case '-':
+		f, err := strconv.ParseFloat(os.Args[2][1:], 32)
+		check(err)
 		_, err := c.VolumeSet(b, &pb.Volume{Volume: float32(f)})
 		check(err)
 	case '+':
+		f, err := strconv.ParseFloat(os.Args[2][1:], 32)
+		check(err)
 		_, err := c.VolumeSet(b, &pb.Volume{Volume: float32(f)})
 		check(err)
 	default:

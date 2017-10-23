@@ -2,6 +2,8 @@
 #include <memory>
 #include <string>
 
+#include <spdlog/spdlog.h>
+
 #include "commands.h"
 
 grpc::Status CommandsImpl::Play(ServerContext* c, const Null* request, Null* reply) {
@@ -70,11 +72,28 @@ grpc::Status CommandsImpl::VolumeGet(ServerContext* c, const Null* request, Volu
 grpc::Status CommandsImpl::VolumeSet(ServerContext* c, const Volume* request, Null* reply) {
     auto v = request->volume();
     auto t = request->action_type();
+
+    float new_volume;
     switch(t) {
-    // TODO
-    case yamp::Volume_Type_GET:
+    case yamp::Volume_Type_SET:
+        new_volume = v;
         break;
+    case yamp::Volume_Type_INCREASE:
+        new_volume = music.GetVolume() + v;
+        break;
+    case yamp::Volume_Type_DECREASE:
+        new_volume = music.GetVolume() - v;
+        break;
+    default:
+        spdlog::get("global")->error(
+            "Invalid action type on VolumeSet handler: {}", t);
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT,
+                            "Invalid action type for VolumeSet");
     }
-    std::cout << t << std::endl;
+
+    if(new_volume > 100.0) new_volume = 100;
+    if(new_volume < 0) new_volume = 0;
+    music.SetVolume(new_volume);
+
     return grpc::Status::OK;
 }
