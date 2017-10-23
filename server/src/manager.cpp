@@ -75,10 +75,3 @@ void Manager::StartServer() {
 
     ExecuteScript("exit.sh");
 }
-
-// Private Functions
-/*
-template <typename T>
-void Manager::ProcessCommand(T& proto, CommandControler& cmd) {
-    cmd.Execute(proto.ReadCommand(), proto);
-}*/

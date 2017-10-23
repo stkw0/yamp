@@ -128,7 +128,7 @@ function(PROTOBUF_GENERATE_GO SRCS DEST)
       VERBATIM )
 
     # Workaround. I don't know why without this it doesn't run
-    add_custom_target(run ALL DEPENDS "${DEST}/${FIL_WE}.pb.go")
+    add_custom_target(go_protobuf ALL DEPENDS "${DEST}/${FIL_WE}.pb.go")
   endforeach()
 
   set_source_files_properties(${${SRCS}} PROPERTIES GENERATED TRUE)

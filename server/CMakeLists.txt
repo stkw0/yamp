@@ -35,6 +35,7 @@ target_link_libraries(yampd
     yaml-cpp mpg123 tag
 )
 
+install(TARGETS yampd DESTINATION bin)
 
 # clang-format
 
