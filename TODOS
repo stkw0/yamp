@@ -1,3 +1,3 @@
 # Añadir modulos para detectar taglib 
 # Arreglar la detección de sfml (no setea los ldflags)
-# Parsear config cliente
+# Parsear config en el cliente
