@@ -18,6 +18,18 @@ grpc::Status CommandsImpl::Pause(ServerContext* c, const Null* request, Null* re
     return grpc::Status::OK;
 }
 
+grpc::Status CommandsImpl::Next(ServerContext* c, const Null* request, Null* reply) {
+    music.SetStatus(Status::Forwarding);
+    return grpc::Status::OK;
+}
+
+grpc::Status CommandsImpl::Back(ServerContext* c, const Null* request, Null* reply) {
+    music.SetStatus(Status::Backing);
+    return grpc::Status::OK;
+}
+
+// Metadata commands
+
 grpc::Status CommandsImpl::GetArtist(ServerContext* c, const Null* request, Artist* reply) {
     auto artist = music.GetCurrent().GetArtist();
     reply->set_artist(artist);
@@ -33,5 +45,17 @@ grpc::Status CommandsImpl::GetTitle(ServerContext* c, const Null* request, Title
 grpc::Status CommandsImpl::GetFile(ServerContext* c, const Null* request, File* reply) {
     auto file = music.GetCurrent().GetFile();
     reply->set_file(file);
+    return grpc::Status::OK;
+}
+
+// Sort commands
+
+grpc::Status CommandsImpl::SortRandom(ServerContext* c, const Null* request, Null* reply) {
+    music.GetList().Sort(Order::RANDOM);
+    return grpc::Status::OK;
+}
+
+grpc::Status CommandsImpl::SortLLF(ServerContext* c, const Null* request, Null* reply) {
+    music.GetList().Sort(Order::LLF);
     return grpc::Status::OK;
 }

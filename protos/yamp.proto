@@ -6,9 +6,17 @@ service Server {
   // Sends a greeting
   rpc Play(Null) returns (Null);
   rpc Pause(Null) returns (Null);
+  rpc Next(Null) returns (Null);
+  rpc Back(Null) returns (Null);
+
+  // Metadata commands
   rpc GetArtist(Null) returns (Artist);
   rpc GetTitle(Null) returns (Title);
   rpc GetFile(Null) returns (File);
+
+  // Sort commands
+  rpc SortRandom(Null) returns (Null);
+  rpc SortLLF(Null) returns (Null);
 }
 
 message Null {

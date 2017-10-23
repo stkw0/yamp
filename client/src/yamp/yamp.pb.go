@@ -112,9 +112,15 @@ type ServerClient interface {
 	// Sends a greeting
 	Play(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
 	Pause(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
+	Next(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
+	Back(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
+	// Metadata commands
 	GetArtist(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Artist, error)
 	GetTitle(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Title, error)
 	GetFile(ctx context.Context, in *Null, opts ...grpc.CallOption) (*File, error)
+	// Sort commands
+	SortRandom(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
+	SortLLF(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
 }
 
 type serverClient struct {
@@ -137,6 +143,24 @@ func (c *serverClient) Play(ctx context.Context, in *Null, opts ...grpc.CallOpti
 func (c *serverClient) Pause(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error) {
 	out := new(Null)
 	err := grpc.Invoke(ctx, "/yamp.Server/Pause", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serverClient) Next(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error) {
+	out := new(Null)
+	err := grpc.Invoke(ctx, "/yamp.Server/Next", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serverClient) Back(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error) {
+	out := new(Null)
+	err := grpc.Invoke(ctx, "/yamp.Server/Back", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -170,15 +194,39 @@ func (c *serverClient) GetFile(ctx context.Context, in *Null, opts ...grpc.CallO
 	return out, nil
 }
 
+func (c *serverClient) SortRandom(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error) {
+	out := new(Null)
+	err := grpc.Invoke(ctx, "/yamp.Server/SortRandom", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serverClient) SortLLF(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error) {
+	out := new(Null)
+	err := grpc.Invoke(ctx, "/yamp.Server/SortLLF", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Server service
 
 type ServerServer interface {
 	// Sends a greeting
 	Play(context.Context, *Null) (*Null, error)
 	Pause(context.Context, *Null) (*Null, error)
+	Next(context.Context, *Null) (*Null, error)
+	Back(context.Context, *Null) (*Null, error)
+	// Metadata commands
 	GetArtist(context.Context, *Null) (*Artist, error)
 	GetTitle(context.Context, *Null) (*Title, error)
 	GetFile(context.Context, *Null) (*File, error)
+	// Sort commands
+	SortRandom(context.Context, *Null) (*Null, error)
+	SortLLF(context.Context, *Null) (*Null, error)
 }
 
 func RegisterServerServer(s *grpc.Server, srv ServerServer) {
@@ -217,6 +265,42 @@ func _Server_Pause_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ServerServer).Pause(ctx, req.(*Null))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Server_Next_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).Next(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/yamp.Server/Next",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).Next(ctx, req.(*Null))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Server_Back_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).Back(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/yamp.Server/Back",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).Back(ctx, req.(*Null))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -275,6 +359,42 @@ func _Server_GetFile_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_SortRandom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).SortRandom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/yamp.Server/SortRandom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).SortRandom(ctx, req.(*Null))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Server_SortLLF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).SortLLF(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/yamp.Server/SortLLF",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).SortLLF(ctx, req.(*Null))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Server_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "yamp.Server",
 	HandlerType: (*ServerServer)(nil),
@@ -288,6 +408,14 @@ var _Server_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Server_Pause_Handler,
 		},
 		{
+			MethodName: "Next",
+			Handler:    _Server_Next_Handler,
+		},
+		{
+			MethodName: "Back",
+			Handler:    _Server_Back_Handler,
+		},
+		{
 			MethodName: "GetArtist",
 			Handler:    _Server_GetArtist_Handler,
 		},
@@ -299,6 +427,14 @@ var _Server_serviceDesc = grpc.ServiceDesc{
 			MethodName: "GetFile",
 			Handler:    _Server_GetFile_Handler,
 		},
+		{
+			MethodName: "SortRandom",
+			Handler:    _Server_SortRandom_Handler,
+		},
+		{
+			MethodName: "SortLLF",
+			Handler:    _Server_SortLLF_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "protos/yamp.proto",
@@ -307,18 +443,20 @@ var _Server_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("protos/yamp.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 203 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2c, 0x28, 0xca, 0x2f,
-	0xc9, 0x2f, 0xd6, 0xaf, 0x4c, 0xcc, 0x2d, 0xd0, 0x03, 0xb3, 0x85, 0x58, 0x40, 0x6c, 0x25, 0x36,
-	0x2e, 0x16, 0xbf, 0xd2, 0x9c, 0x1c, 0x25, 0x05, 0x2e, 0x36, 0xc7, 0xa2, 0x92, 0xcc, 0xe2, 0x12,
-	0x21, 0x31, 0x2e, 0xb6, 0x44, 0x30, 0x4b, 0x82, 0x51, 0x81, 0x51, 0x83, 0x33, 0x08, 0xca, 0x53,
-	0x92, 0xe5, 0x62, 0x0d, 0xc9, 0x2c, 0xc9, 0x49, 0x15, 0x12, 0xe1, 0x62, 0x2d, 0x01, 0x31, 0xa0,
-	0xf2, 0x10, 0x8e, 0x92, 0x14, 0x17, 0x8b, 0x5b, 0x66, 0x4e, 0xaa, 0x90, 0x10, 0x17, 0x4b, 0x5a,
-	0x26, 0x5c, 0x12, 0xcc, 0x36, 0xda, 0xc1, 0xc8, 0xc5, 0x16, 0x9c, 0x5a, 0x54, 0x96, 0x5a, 0x24,
-	0x24, 0xc7, 0xc5, 0x12, 0x90, 0x93, 0x58, 0x29, 0xc4, 0xa5, 0x07, 0x76, 0x0a, 0xc8, 0x6e, 0x29,
-	0x24, 0xb6, 0x90, 0x3c, 0x17, 0x6b, 0x40, 0x62, 0x69, 0x71, 0x2a, 0x4e, 0x05, 0xaa, 0x5c, 0x9c,
-	0xee, 0xa9, 0x25, 0x50, 0xb7, 0x22, 0x2b, 0xe2, 0x81, 0xb0, 0xa1, 0x32, 0xca, 0x5c, 0x1c, 0xee,
-	0xa9, 0x25, 0x10, 0x07, 0x23, 0xab, 0xe2, 0x86, 0xb0, 0x21, 0x12, 0x8a, 0x5c, 0xec, 0xee, 0xa9,
-	0x25, 0x60, 0x67, 0x63, 0xb1, 0x0e, 0x24, 0x9e, 0xc4, 0x06, 0x0e, 0x2c, 0x63, 0x40, 0x00, 0x00,
-	0x00, 0xff, 0xff, 0x55, 0x0e, 0xf6, 0x5f, 0x41, 0x01, 0x00, 0x00,
+	// 240 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x91, 0xc1, 0x4a, 0x03, 0x31,
+	0x10, 0x86, 0xa9, 0x64, 0x53, 0xfb, 0xeb, 0xc5, 0x41, 0x44, 0x0a, 0xd6, 0x76, 0x55, 0xf0, 0x54,
+	0x41, 0x9f, 0x40, 0x0f, 0xdd, 0x4b, 0x29, 0xa5, 0xf5, 0x05, 0xa2, 0x8e, 0xb0, 0x98, 0xba, 0x25,
+	0x3b, 0x15, 0xf7, 0xf1, 0x7c, 0x33, 0xd9, 0x24, 0xc8, 0x1e, 0x4c, 0x6f, 0xdf, 0xe4, 0xfb, 0x61,
+	0xe6, 0x27, 0x38, 0xd9, 0xba, 0x4a, 0xaa, 0xfa, 0xae, 0x31, 0x9b, 0xed, 0xd4, 0x33, 0xa9, 0x96,
+	0x73, 0x0d, 0xb5, 0xd8, 0x59, 0x9b, 0x8f, 0xa1, 0x1f, 0x9d, 0x94, 0xb5, 0xd0, 0x19, 0xb4, 0xf1,
+	0x74, 0xde, 0x1b, 0xf7, 0x6e, 0x07, 0xab, 0x38, 0xe5, 0x17, 0xc8, 0x9e, 0x4b, 0xb1, 0x4c, 0xa7,
+	0xc8, 0xa4, 0x85, 0xe8, 0xc3, 0x90, 0x0f, 0xa1, 0x66, 0xa5, 0x65, 0x22, 0xa8, 0xf7, 0xf2, 0x4f,
+	0x7a, 0xbe, 0xff, 0x39, 0x80, 0x5e, 0xb3, 0xfb, 0x62, 0x47, 0x23, 0xa8, 0xa5, 0x35, 0x0d, 0x61,
+	0xea, 0x4f, 0x69, 0x77, 0x0f, 0x3b, 0x4c, 0x97, 0xc8, 0x96, 0x66, 0x57, 0x73, 0x32, 0x30, 0x82,
+	0x5a, 0xf0, 0xb7, 0xec, 0xf3, 0x4f, 0xe6, 0xf5, 0x23, 0xe9, 0x6f, 0x30, 0x28, 0x58, 0x62, 0xd7,
+	0x6e, 0xe8, 0x38, 0x70, 0x34, 0x57, 0x38, 0x2c, 0x58, 0x42, 0xe1, 0x6e, 0xea, 0x28, 0x70, 0x10,
+	0x13, 0xf4, 0x0b, 0x16, 0x5f, 0xfb, 0x9f, 0x75, 0xfe, 0xfd, 0x1a, 0x58, 0x57, 0x4e, 0x56, 0xe6,
+	0xf3, 0xad, 0xda, 0x24, 0x8f, 0x9a, 0xa0, 0xdf, 0xa6, 0xe6, 0xf3, 0x59, 0x2a, 0xf2, 0xa2, 0xfd,
+	0xaf, 0x3d, 0xfc, 0x06, 0x00, 0x00, 0xff, 0xff, 0x52, 0x25, 0x38, 0xea, 0xca, 0x01, 0x00, 0x00,
 }
