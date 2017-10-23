@@ -10,6 +10,8 @@ It is generated from these files:
 It has these top-level messages:
 	Null
 	Artist
+	Title
+	File
 */
 package yamp
 
@@ -57,9 +59,43 @@ func (m *Artist) GetArtist() string {
 	return ""
 }
 
+type Title struct {
+	Title string `protobuf:"bytes,1,opt,name=title" json:"title,omitempty"`
+}
+
+func (m *Title) Reset()                    { *m = Title{} }
+func (m *Title) String() string            { return proto.CompactTextString(m) }
+func (*Title) ProtoMessage()               {}
+func (*Title) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+
+func (m *Title) GetTitle() string {
+	if m != nil {
+		return m.Title
+	}
+	return ""
+}
+
+type File struct {
+	File string `protobuf:"bytes,1,opt,name=file" json:"file,omitempty"`
+}
+
+func (m *File) Reset()                    { *m = File{} }
+func (m *File) String() string            { return proto.CompactTextString(m) }
+func (*File) ProtoMessage()               {}
+func (*File) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+
+func (m *File) GetFile() string {
+	if m != nil {
+		return m.File
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*Null)(nil), "yamp.Null")
 	proto.RegisterType((*Artist)(nil), "yamp.Artist")
+	proto.RegisterType((*Title)(nil), "yamp.Title")
+	proto.RegisterType((*File)(nil), "yamp.File")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -77,6 +113,8 @@ type ServerClient interface {
 	Play(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
 	Pause(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Null, error)
 	GetArtist(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Artist, error)
+	GetTitle(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Title, error)
+	GetFile(ctx context.Context, in *Null, opts ...grpc.CallOption) (*File, error)
 }
 
 type serverClient struct {
@@ -114,6 +152,24 @@ func (c *serverClient) GetArtist(ctx context.Context, in *Null, opts ...grpc.Cal
 	return out, nil
 }
 
+func (c *serverClient) GetTitle(ctx context.Context, in *Null, opts ...grpc.CallOption) (*Title, error) {
+	out := new(Title)
+	err := grpc.Invoke(ctx, "/yamp.Server/GetTitle", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serverClient) GetFile(ctx context.Context, in *Null, opts ...grpc.CallOption) (*File, error) {
+	out := new(File)
+	err := grpc.Invoke(ctx, "/yamp.Server/GetFile", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Server service
 
 type ServerServer interface {
@@ -121,6 +177,8 @@ type ServerServer interface {
 	Play(context.Context, *Null) (*Null, error)
 	Pause(context.Context, *Null) (*Null, error)
 	GetArtist(context.Context, *Null) (*Artist, error)
+	GetTitle(context.Context, *Null) (*Title, error)
+	GetFile(context.Context, *Null) (*File, error)
 }
 
 func RegisterServerServer(s *grpc.Server, srv ServerServer) {
@@ -181,6 +239,42 @@ func _Server_GetArtist_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_GetTitle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).GetTitle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/yamp.Server/GetTitle",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).GetTitle(ctx, req.(*Null))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Server_GetFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).GetFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/yamp.Server/GetFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).GetFile(ctx, req.(*Null))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Server_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "yamp.Server",
 	HandlerType: (*ServerServer)(nil),
@@ -197,6 +291,14 @@ var _Server_serviceDesc = grpc.ServiceDesc{
 			MethodName: "GetArtist",
 			Handler:    _Server_GetArtist_Handler,
 		},
+		{
+			MethodName: "GetTitle",
+			Handler:    _Server_GetTitle_Handler,
+		},
+		{
+			MethodName: "GetFile",
+			Handler:    _Server_GetFile_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "protos/yamp.proto",
@@ -205,14 +307,18 @@ var _Server_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("protos/yamp.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 136 bytes of a gzipped FileDescriptorProto
+	// 203 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2c, 0x28, 0xca, 0x2f,
 	0xc9, 0x2f, 0xd6, 0xaf, 0x4c, 0xcc, 0x2d, 0xd0, 0x03, 0xb3, 0x85, 0x58, 0x40, 0x6c, 0x25, 0x36,
 	0x2e, 0x16, 0xbf, 0xd2, 0x9c, 0x1c, 0x25, 0x05, 0x2e, 0x36, 0xc7, 0xa2, 0x92, 0xcc, 0xe2, 0x12,
-	0x21, 0x31, 0x2e, 0xb6, 0x44, 0x30, 0x4b, 0x82, 0x51, 0x81, 0x51, 0x83, 0x33, 0x08, 0xca, 0x33,
-	0x2a, 0xe0, 0x62, 0x0b, 0x4e, 0x2d, 0x2a, 0x4b, 0x2d, 0x12, 0x92, 0xe3, 0x62, 0x09, 0xc8, 0x49,
-	0xac, 0x14, 0xe2, 0xd2, 0x03, 0x1b, 0x07, 0xd2, 0x2f, 0x85, 0xc4, 0x16, 0x92, 0xe7, 0x62, 0x0d,
-	0x48, 0x2c, 0x2d, 0x4e, 0xc5, 0xa9, 0x40, 0x95, 0x8b, 0xd3, 0x3d, 0xb5, 0x04, 0x6a, 0x1f, 0xb2,
-	0x22, 0x1e, 0x08, 0x1b, 0x22, 0x93, 0xc4, 0x06, 0x76, 0xa8, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff,
-	0xd0, 0x1a, 0xc1, 0x46, 0xbd, 0x00, 0x00, 0x00,
+	0x21, 0x31, 0x2e, 0xb6, 0x44, 0x30, 0x4b, 0x82, 0x51, 0x81, 0x51, 0x83, 0x33, 0x08, 0xca, 0x53,
+	0x92, 0xe5, 0x62, 0x0d, 0xc9, 0x2c, 0xc9, 0x49, 0x15, 0x12, 0xe1, 0x62, 0x2d, 0x01, 0x31, 0xa0,
+	0xf2, 0x10, 0x8e, 0x92, 0x14, 0x17, 0x8b, 0x5b, 0x66, 0x4e, 0xaa, 0x90, 0x10, 0x17, 0x4b, 0x5a,
+	0x26, 0x5c, 0x12, 0xcc, 0x36, 0xda, 0xc1, 0xc8, 0xc5, 0x16, 0x9c, 0x5a, 0x54, 0x96, 0x5a, 0x24,
+	0x24, 0xc7, 0xc5, 0x12, 0x90, 0x93, 0x58, 0x29, 0xc4, 0xa5, 0x07, 0x76, 0x0a, 0xc8, 0x6e, 0x29,
+	0x24, 0xb6, 0x90, 0x3c, 0x17, 0x6b, 0x40, 0x62, 0x69, 0x71, 0x2a, 0x4e, 0x05, 0xaa, 0x5c, 0x9c,
+	0xee, 0xa9, 0x25, 0x50, 0xb7, 0x22, 0x2b, 0xe2, 0x81, 0xb0, 0xa1, 0x32, 0xca, 0x5c, 0x1c, 0xee,
+	0xa9, 0x25, 0x10, 0x07, 0x23, 0xab, 0xe2, 0x86, 0xb0, 0x21, 0x12, 0x8a, 0x5c, 0xec, 0xee, 0xa9,
+	0x25, 0x60, 0x67, 0x63, 0xb1, 0x0e, 0x24, 0x9e, 0xc4, 0x06, 0x0e, 0x2c, 0x63, 0x40, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0x55, 0x0e, 0xf6, 0x5f, 0x41, 0x01, 0x00, 0x00,
 }

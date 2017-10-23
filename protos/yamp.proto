@@ -7,6 +7,8 @@ service Server {
   rpc Play(Null) returns (Null);
   rpc Pause(Null) returns (Null);
   rpc GetArtist(Null) returns (Artist);
+  rpc GetTitle(Null) returns (Title);
+  rpc GetFile(Null) returns (File);
 }
 
 message Null {
@@ -14,6 +16,14 @@ message Null {
 
 message Artist {
 	string artist = 1;
+}
+
+message Title {
+	string title = 1;
+}
+
+message File {
+	string file = 1;
 }
 
 

@@ -7,9 +7,9 @@ find_package(fmt REQUIRED)
 # TODO: Next upstream version will support it
 #find_package(yaml-cpp REQUIRED)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wcast-qual \
-	-Wconversion -Wunreachable-code -Wmissing-noreturn -Wshadow \
-	-Wfatal-errors -pedantic")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wcast-qual \
+#	-Wconversion -Wunreachable-code -Wmissing-noreturn -Wshadow \
+#	-Wfatal-errors -pedantic")
 
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SRC_DIR} ${PROTOS})
 grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_SRC_DIR} ${PROTOS})

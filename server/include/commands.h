@@ -8,6 +8,8 @@
 using grpc::ServerContext;
 using yamp::Null;
 using yamp::Artist;
+using yamp::Title;
+using yamp::File;
 
 class CommandsImpl final : public yamp::Server::Service {
 public:
@@ -17,6 +19,8 @@ private:
     grpc::Status Play(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Pause(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status GetArtist(ServerContext* c, const Null* request, Artist* reply) override;
+    grpc::Status GetTitle(ServerContext* c, const Null* request, Title* reply) override;
+    grpc::Status GetFile(ServerContext* c, const Null* request, File* reply) override;
    private:
    	Music& music;
 };
