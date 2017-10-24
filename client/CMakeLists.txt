@@ -5,7 +5,7 @@ file(GLOB_RECURSE SRC *.go)
 add_custom_command(
   OUTPUT yampc
   COMMAND bash
-  ARGS "-c" "mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/src/yamp; cp ${PROTO_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/src/yamp; GOPATH+=:${CMAKE_CURRENT_BINARY_DIR}; export GOPATH; go build -o yampc ${SRC}"
+  ARGS "-c" "mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/src/yamp; cp ${PROTO_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/src/yamp; GOPATH=$ENV{GOPATH}:${CMAKE_CURRENT_BINARY_DIR}; export GOPATH; go build -o yampc ${SRC}"
   DEPENDS go_protobuf
   VERBATIM )
 
