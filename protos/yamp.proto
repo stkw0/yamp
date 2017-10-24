@@ -56,6 +56,10 @@ message Info {
 		PLAYING = 0;
 		PAUSED = 1;
 		STOPED = 2;
+		EXIT = 3;
+		FORWARDING = 4;
+    	BACKING = 5;
+    	RESTART = 6;
 	};
 
 	Status status = 1;
