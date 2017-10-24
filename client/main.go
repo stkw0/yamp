@@ -102,6 +102,21 @@ func parseGetMetadataCmd(b context.Context, c pb.ServerClient, cmd string) {
 	}
 }
 
+func parseInfoCmd(b context.Context, c pb.ServerClient, cmd string) {
+	if len(cmd) == 0 {
+		log.Fatal("A sub-option is required")
+	}
+
+	switch cmd[0] {
+	case 's':
+		response, err := c.GetInfoStatus(b, &pb.Null{})
+		check(err)
+		fmt.Println(response.Status)
+	default:
+		log.Fatal("Invalid command")
+	}
+}
+
 func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 	switch cmd[0] {
 	case 'P':
@@ -122,6 +137,8 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 		parseSortCmd(b, c, cmd[1:])
 	case 'v':
 		parseVolumeCmd(b, c, cmd[1:])
+	case 'i':
+		parseInfoCmd(b, c, cmd[1:])
 	default:
 		log.Fatal("Invalid command")
 	}

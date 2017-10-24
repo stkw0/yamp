@@ -11,6 +11,7 @@ using yamp::Artist;
 using yamp::Title;
 using yamp::File;
 using yamp::Volume;
+using yamp::Info;
 
 class CommandsImpl final : public yamp::Server::Service {
 public:
@@ -34,6 +35,8 @@ private:
     // Volume commands
     grpc::Status VolumeGet(ServerContext* c, const Null* request, Volume* reply) override;
     grpc::Status VolumeSet(ServerContext* c, const Volume* request, Null* reply) override;
+
+    grpc::Status GetInfoStatus(ServerContext* c, const Null* request, Info* reply) override;
 
    private:
    	Music& music;

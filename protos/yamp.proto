@@ -21,6 +21,8 @@ service Server {
   // Volume commands
   rpc VolumeGet(Null) returns (Volume);
   rpc VolumeSet(Volume) returns (Null);
+
+  rpc GetInfoStatus(Null) returns(Info);
 }
 
 message Null {
@@ -47,6 +49,16 @@ message Volume {
 	};
 	// Only makes sends when setting (also, it sucks)
 	Type action_type = 2;
+}
+
+message Info {
+	enum Status {
+		PLAYING = 0;
+		PAUSED = 1;
+		STOPED = 2;
+	};
+
+	Status status = 1;
 }
 
 
