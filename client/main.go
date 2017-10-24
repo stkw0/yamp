@@ -30,12 +30,12 @@ func parseVolumeSetCmd(b context.Context, c pb.ServerClient, cmd string) {
 	case '-':
 		f, err := strconv.ParseFloat(os.Args[2][1:], 32)
 		check(err)
-		_, err = c.VolumeSet(b, &pb.Volume{Volume: float32(f)})
+		_, err = c.VolumeSet(b, &pb.Volume{Volume: float32(f), ActionType: pb.Volume_DECREASE})
 		check(err)
 	case '+':
 		f, err := strconv.ParseFloat(os.Args[2][1:], 32)
 		check(err)
-		_, err = c.VolumeSet(b, &pb.Volume{Volume: float32(f)})
+		_, err = c.VolumeSet(b, &pb.Volume{Volume: float32(f), ActionType: pb.Volume_INCREASE})
 		check(err)
 	default:
 		f, err := strconv.ParseFloat(os.Args[2], 32)
