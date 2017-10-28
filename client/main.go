@@ -16,16 +16,13 @@ import (
 )
 
 const (
-	config_file = "~/.config/yamp/config"
+	config_file = "~/.config/yamp/yampc.yml"
 )
 
 type ConfStruct struct {
-	Pid_file     string `yaml:"pid_file"`
-	Music_folder string `yaml:"music_folder"`
-	Log_file     string `yaml:"log_file"`
-	Log_level    int    `yaml:"log_level"`
-	Port_number  int    `yaml:"port_number"`
-	Bind_address string `yaml:"bind_address"`
+	Server_ip   string `yaml:"server_ip"`
+	Log_file    string `yaml:"log_file"`
+	Port_number string `yaml:"port_number"`
 }
 
 var conf ConfStruct
@@ -168,21 +165,16 @@ func Expand(path string) string {
 
 func main() {
 	data, err := ioutil.ReadFile(Expand(config_file))
-	if err != nil {
-		log.Fatalf("erro: %v", err)
-	}
-
+	check(err)
 	err = yaml.Unmarshal([]byte(data), &conf)
-	if err != nil {
-		log.Fatalf("error: %v", err)
-	}
+	check(err)
 
 	if len(os.Args) < 2 {
 		log.Fatal("An argument is required")
 	}
 
 	// Set up a connection to the server.
-	address := conf.Bind_address + ":" + strconv.Itoa(conf.Port_number)
+	address := conf.Server_ip + ":" + conf.Port_number
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)

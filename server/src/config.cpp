@@ -86,7 +86,7 @@ void Config::Load() {
     path default_music(Expand("~/Music/"));
     if(exists(default_music)) opt.dir = default_music.c_str();
 
-    const auto config_file = CONFIG_FOLDER + "config";
+    const auto config_file = CONFIG_FOLDER + "server.yml";
     try {
         LoadFile(config_file);
     } catch(YAML::BadFile& e) {
