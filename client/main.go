@@ -3,17 +3,32 @@ package main
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"os/user"
 	"strconv"
+	"strings"
 
 	"google.golang.org/grpc"
+	"gopkg.in/yaml.v2"
 	pb "yamp"
 )
 
 const (
-	address = "localhost:6600"
+	config_file = "~/.config/yamp/config"
 )
+
+type ConfStruct struct {
+	Pid_file     string `yaml:"pid_file"`
+	Music_folder string `yaml:"music_folder"`
+	Log_file     string `yaml:"log_file"`
+	Log_level    int    `yaml:"log_level"`
+	Port_number  int    `yaml:"port_number"`
+	Bind_address string `yaml:"bind_address"`
+}
+
+var conf ConfStruct
 
 func check(err error) {
 	if err != nil {
@@ -144,12 +159,30 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 	}
 }
 
+func Expand(path string) string {
+	usr, err := user.Current()
+	check(err)
+
+	return strings.Replace(path, "~", usr.HomeDir, 1)
+}
+
 func main() {
+	data, err := ioutil.ReadFile(Expand(config_file))
+	if err != nil {
+		log.Fatalf("erro: %v", err)
+	}
+
+	err = yaml.Unmarshal([]byte(data), &conf)
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
+
 	if len(os.Args) < 2 {
 		log.Fatal("An argument is required")
 	}
 
 	// Set up a connection to the server.
+	address := conf.Bind_address + ":" + strconv.Itoa(conf.Port_number)
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)

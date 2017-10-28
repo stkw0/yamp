@@ -59,9 +59,8 @@ void Config::LoadFile(const std::string& f) {
     if(auto e = config["music_folder"]) opt.dir = e.as<std::string>();
     if(auto e = config["log_level"]) opt.loglevel = e.as<short>();
 
-    // TODO: ipv6
-    if(auto e = config["tcp"]["port_number"]) opt.portnumber = e.as<unsigned>();
-    if(auto e = config["tcp"]["bind_address"])
+    if(auto e = config["port_number"]) opt.portnumber = e.as<unsigned>();
+    if(auto e = config["bind_address"])
         opt.bindaddress = e.as<std::string>();
 }
 
@@ -72,9 +71,8 @@ void Config::Store(const std::string& f) {
     config["music_folder"] = opt.dir.c_str();
     config["log_level"] = opt.loglevel;
 
-    // TODO: ipv6
-    config["tcp"]["port_number"] = opt.portnumber;
-    config["tcp"]["bind_address"] = opt.bindaddress;
+    config["port_number"] = opt.portnumber;
+    config["bind_address"] = opt.bindaddress;
 
     std::ofstream config_file(f);
     config_file << config;
