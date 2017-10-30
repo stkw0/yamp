@@ -12,7 +12,7 @@ endif()
 add_custom_command(
   OUTPUT go_get
   COMMAND bash
-  ARGS "-c" "export GOPATH=${GO_PATH}; go get -v google.golang.org/grpc; touch go_get"
+  ARGS "-c" "export GOPATH=${GO_PATH}; go get -v google.golang.org/grpc; go get -v gopkg.in/yaml.v2; touch go_get"
   DEPENDS go_protobuf
   VERBATIM )
 
