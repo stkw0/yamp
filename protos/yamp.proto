@@ -22,6 +22,9 @@ service Server {
   rpc VolumeGet(Null) returns (Volume);
   rpc VolumeSet(Volume) returns (Null);
 
+  // Filter commands
+  rpc FilterArtist(Artist) returns (Null);
+
   rpc GetInfoStatus(Null) returns(Info);
 }
 

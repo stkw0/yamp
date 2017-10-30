@@ -36,6 +36,9 @@ private:
     grpc::Status VolumeGet(ServerContext* c, const Null* request, Volume* reply) override;
     grpc::Status VolumeSet(ServerContext* c, const Volume* request, Null* reply) override;
 
+    // Filter commands
+    grpc::Status FilterArtist(ServerContext* c, const Artist* request, Null* reply) override;
+
     grpc::Status GetInfoStatus(ServerContext* c, const Null* request, Info* reply) override;
 
    private:

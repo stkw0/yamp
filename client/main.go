@@ -33,6 +33,20 @@ func check(err error) {
 	}
 }
 
+func parseFilterCmd(b context.Context, c pb.ServerClient, cmd string) {
+	if len(cmd) == 0 {
+		log.Fatal("A sub-option is required")
+	}
+
+	switch cmd[0] {
+	case 'a':
+		_, err := c.FilterArtist(b, &pb.Artist{Artist: os.Args[2][1:]})
+		check(err)
+	default:
+		log.Fatal("Invalid sub-command")
+	}
+}
+
 func parseVolumeSetCmd(b context.Context, c pb.ServerClient, cmd string) {
 	if len(cmd) == 0 {
 		log.Fatal("A sub-option is required")
@@ -151,6 +165,8 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 		parseVolumeCmd(b, c, cmd[1:])
 	case 'i':
 		parseInfoCmd(b, c, cmd[1:])
+	case 'f':
+		parseFilterCmd(b, c, cmd[1:])
 	default:
 		log.Fatal("Invalid command")
 	}

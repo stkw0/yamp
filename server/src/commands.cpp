@@ -98,6 +98,19 @@ grpc::Status CommandsImpl::VolumeSet(ServerContext* c, const Volume* request, Nu
     return grpc::Status::OK;
 }
 
+// Filter commands
+
+grpc::Status CommandsImpl::FilterArtist(ServerContext* c, const Artist* request, Null* reply) {
+    auto artist = request->artist();
+    auto tmp = music.GetStatus();
+    music.SetStatus(Status::Stoped);
+    music.GetList().FilterArtist(artist);
+    music.SetStatus(tmp);
+
+    return grpc::Status::OK;
+
+}
+
 grpc::Status CommandsImpl::GetInfoStatus(ServerContext* c, const Null* request, Info* reply) {
     reply->set_status(static_cast<yamp::Info_Status>(music.GetStatus()));
     return grpc::Status::OK;
