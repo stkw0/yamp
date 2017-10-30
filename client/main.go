@@ -40,7 +40,7 @@ func parseFilterCmd(b context.Context, c pb.ServerClient, cmd string) {
 
 	switch cmd[0] {
 	case 'a':
-		_, err := c.FilterArtist(b, &pb.Artist{Artist: os.Args[2][1:]})
+		_, err := c.FilterArtist(b, &pb.Artist{Artist: os.Args[2]})
 		check(err)
 	default:
 		log.Fatal("Invalid sub-command")
