@@ -38,7 +38,7 @@ func canOpen(path string) bool {
 	if err == nil {
 		return true
 	}
-	return true
+	return false
 }
 
 func addCmd(b context.Context, c pb.ServerClient, cmd string) {
@@ -46,7 +46,7 @@ func addCmd(b context.Context, c pb.ServerClient, cmd string) {
 		log.Fatal("A sub-option is required")
 	}
 
-	path := os.Args[2]
+	path := "/" + os.Args[2]
 	if !canOpen(path) {
 		pwd, err := os.Getwd()
 		check(err)

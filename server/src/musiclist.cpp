@@ -13,7 +13,7 @@
 
 void MusicList::LoadDir(path p) {
     if(!is_directory(p)) {
-        throw std::runtime_error("Error con el directorio");
+        throw std::runtime_error("Can not open the directory");
     }
 
     for(auto& entry : boost::make_iterator_range(directory_iterator(p), {})) {
