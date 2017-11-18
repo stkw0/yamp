@@ -33,17 +33,32 @@ func check(err error) {
 	}
 }
 
+func canOpen(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	return true
+}
+
 func addCmd(b context.Context, c pb.ServerClient, cmd string) {
 	if len(cmd) == 0 {
 		log.Fatal("A sub-option is required")
 	}
 
+	path := os.Args[2]
+	if !canOpen(path) {
+		pwd, err := os.Getwd()
+		check(err)
+		path = pwd + "/" + path
+	}
+
 	switch cmd[0] {
 	case 'f':
-		_, err := c.AddFile(b, &pb.File{File: os.Args[2]})
+		_, err := c.AddFile(b, &pb.File{File: path})
 		check(err)
 	case 'F':
-		_, err := c.AddFolder(b, &pb.File{File: os.Args[2]})
+		_, err := c.AddFolder(b, &pb.File{File: path})
 		check(err)
 	}
 }
