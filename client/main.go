@@ -60,6 +60,20 @@ func addCmd(b context.Context, c pb.ServerClient, cmd string) {
 	case 'F':
 		_, err := c.AddFolder(b, &pb.File{File: path})
 		check(err)
+	case 'r':
+		_, err := c.Clear(b, &pb.Null{})
+		check(err)
+		_, err = c.AddFile(b, &pb.File{File: path})
+		check(err)
+		_, err = c.Play(b, &pb.Null{})
+		check(err)
+	case 'R':
+		_, err := c.Clear(b, &pb.Null{})
+		check(err)
+		_, err = c.AddFolder(b, &pb.File{File: path})
+		check(err)
+		_, err = c.Play(b, &pb.Null{})
+		check(err)
 	}
 }
 
