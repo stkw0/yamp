@@ -33,6 +33,21 @@ func check(err error) {
 	}
 }
 
+func addCmd(b context.Context, c pb.ServerClient, cmd string) {
+	if len(cmd) == 0 {
+		log.Fatal("A sub-option is required")
+	}
+
+	switch cmd[0] {
+	case 'f':
+		_, err := c.AddFile(b, &pb.File{File: os.Args[2]})
+		check(err)
+	case 'F':
+		_, err := c.AddFolder(b, &pb.File{File: os.Args[2]})
+		check(err)
+	}
+}
+
 func parseFilterCmd(b context.Context, c pb.ServerClient, cmd string) {
 	if len(cmd) == 0 {
 		log.Fatal("A sub-option is required")
@@ -157,6 +172,9 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 	case 'b':
 		_, err := c.Back(b, &pb.Null{})
 		check(err)
+	case 'C':
+		_, err := c.Clear(b, &pb.Null{})
+		check(err)
 	case 'g':
 		parseGetMetadataCmd(b, c, cmd[1:])
 	case 's':
@@ -167,6 +185,8 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 		parseInfoCmd(b, c, cmd[1:])
 	case 'f':
 		parseFilterCmd(b, c, cmd[1:])
+	case 'a':
+		addCmd(b, c, cmd[1:])
 	default:
 		log.Fatal("Invalid command")
 	}

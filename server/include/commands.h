@@ -22,6 +22,7 @@ private:
     grpc::Status Pause(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Next(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Back(ServerContext* c, const Null* request, Null* reply) override;
+    grpc::Status Clear(ServerContext* c, const Null* request, Null* reply) override;
 
     // Metadata commands
     grpc::Status GetArtist(ServerContext* c, const Null* request, Artist* reply) override;
@@ -38,6 +39,10 @@ private:
 
     // Filter commands
     grpc::Status FilterArtist(ServerContext* c, const Artist* request, Null* reply) override;
+
+    // Add commands
+    grpc::Status AddFile(ServerContext* c, const File* request,Null* reply) override;
+    grpc::Status AddFolder(ServerContext* c, const File* request,Null* reply) override;
 
     grpc::Status GetInfoStatus(ServerContext* c, const Null* request, Info* reply) override;
 

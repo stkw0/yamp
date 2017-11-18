@@ -8,6 +8,7 @@ service Server {
   rpc Pause(Null) returns (Null);
   rpc Next(Null) returns (Null);
   rpc Back(Null) returns (Null);
+  rpc Clear(Null) returns (Null);
 
   // Metadata commands
   rpc GetArtist(Null) returns (Artist);
@@ -24,6 +25,10 @@ service Server {
 
   // Filter commands
   rpc FilterArtist(Artist) returns (Null);
+
+  // Add commands
+  rpc AddFile(File) returns (Null);
+  rpc AddFolder(File) returns (Null);
 
   rpc GetInfoStatus(Null) returns(Info);
 }
