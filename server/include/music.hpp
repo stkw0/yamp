@@ -8,9 +8,9 @@
 #include <boost/filesystem.hpp>
 #include <SFML/Audio.hpp>
 
-#include "musiclist.h"
-#include "sound.h"
-#include "song.h"
+#include "musiclist.hpp"
+#include "sound.hpp"
+#include "song.hpp"
 
 using namespace boost::filesystem;
 

@@ -2,7 +2,7 @@
 
 #include <grpc++/grpc++.h>
 
-#include "music.h"
+#include "music.hpp"
 #include "yamp.grpc.pb.h"
 
 using grpc::ServerContext;

@@ -5,7 +5,7 @@
 #include <boost/filesystem.hpp>
 #include <spdlog/spdlog.h>
 
-#include "utils.h"
+#include "utils.hpp"
 
 using namespace boost::filesystem;
 

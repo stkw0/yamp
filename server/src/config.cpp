@@ -60,8 +60,7 @@ void Config::LoadFile(const std::string& f) {
     if(auto e = config["log_level"]) opt.loglevel = e.as<short>();
 
     if(auto e = config["port_number"]) opt.portnumber = e.as<unsigned>();
-    if(auto e = config["bind_address"])
-        opt.bindaddress = e.as<std::string>();
+    if(auto e = config["bind_address"]) opt.bindaddress = e.as<std::string>();
 }
 
 void Config::Store(const std::string& f) {

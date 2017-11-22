@@ -121,20 +121,18 @@ grpc::Status CommandsImpl::FilterArtist(ServerContext* c, const Artist* request,
 grpc::Status CommandsImpl::AddFile(ServerContext* c, const File* request, Null* reply) {
     auto file = request->file();
     music.GetList().LoadFile(file);
-    
+
     return grpc::Status::OK;
 }
 
 grpc::Status CommandsImpl::AddFolder(ServerContext* c, const File* request, Null* reply) {
     auto file = request->file();
     music.GetList().LoadDir(file);
-    
+
     return grpc::Status::OK;
 }
-
 
 grpc::Status CommandsImpl::GetInfoStatus(ServerContext* c, const Null* request, Info* reply) {
     reply->set_status(static_cast<yamp::Info_Status>(music.GetStatus()));
     return grpc::Status::OK;
 }
-
