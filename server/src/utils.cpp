@@ -5,8 +5,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "config.h"
-#include "utils.h"
+#include "config.hpp"
+#include "utils.hpp"
 
 // Copied from the net.
 void daemonize() {

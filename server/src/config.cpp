@@ -5,7 +5,7 @@
 #include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
-#include "config.h"
+#include "config.hpp"
 
 static std::mutex config_mutex;
 

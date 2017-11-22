@@ -5,8 +5,8 @@
 
 #include <spdlog/spdlog.h>
 
-#include "music.h"
-#include "utils.h"
+#include "music.hpp"
+#include "utils.hpp"
 
 static std::mutex status_mutex;
 

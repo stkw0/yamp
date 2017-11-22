@@ -9,10 +9,10 @@
 #include <grpc++/grpc++.h>
 #include <spdlog/spdlog.h>
 
-#include "commands.h"
-#include "manager.h"
-#include "music.h"
-#include "utils.h"
+#include "commands.hpp"
+#include "manager.hpp"
+#include "music.hpp"
+#include "utils.hpp"
 
 using namespace fmt::literals;
 using namespace boost::filesystem;

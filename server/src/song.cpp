@@ -1,5 +1,5 @@
-#include "song.h"
-#include "config.h"
+#include "song.hpp"
+#include "config.hpp"
 
 #include <taglib/fileref.h>
 #include <taglib/tag.h>

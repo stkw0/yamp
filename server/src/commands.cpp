@@ -4,7 +4,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include "commands.h"
+#include "commands.hpp"
 
 grpc::Status CommandsImpl::Play(ServerContext* c, const Null* request, Null* reply) {
     music.SetStatus(Status::Playing);

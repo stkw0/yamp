@@ -3,8 +3,8 @@
 
 #include <spdlog/spdlog.h>
 
-#include "config.h"
-#include "manager.h"
+#include "config.hpp"
+#include "manager.hpp"
 
 int main(int argc, char* argv[]) try {
     auto logging = spdlog::stdout_color_mt("global");
