@@ -47,7 +47,7 @@ func addCmd(b context.Context, c pb.ServerClient, cmd string) {
 	}
 
 	path := "/" + os.Args[2]
-	if path == "." || !canOpen(path) {
+	if path == "/." || !canOpen(path) {
 		pwd, err := os.Getwd()
 		check(err)
 		path = pwd + "/" + path
