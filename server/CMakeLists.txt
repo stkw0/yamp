@@ -32,7 +32,7 @@ target_link_libraries(yampd
     sfml-system sfml-audio
     gRPC::grpc++_reflection
     protobuf::libprotobuf
-    yaml-cpp mpg123 tag
+    yaml-cpp mpg123 tag fmt
 )
 
 install(TARGETS yampd DESTINATION bin)
