@@ -132,6 +132,21 @@ grpc::Status CommandsImpl::AddFolder(ServerContext* c, const File* request, Null
     return grpc::Status::OK;
 }
 
+// Time offset commands
+grpc::Status CommandsImpl::GetRemainingTime(ServerContext* c,
+                                            const Null* request, Offset* reply) {
+    auto remaining = music.GetRemainingMilliseconds();
+    reply->set_offset(remaining);
+    return grpc::Status::OK;
+}
+
+grpc::Status CommandsImpl::SetOffsetTime(ServerContext* c,
+                                         const Offset* request, Null* reply) {
+    auto offset = request->offset();
+    music.SetPlayingOffset(offset);
+    return grpc::Status::OK;
+}
+
 grpc::Status CommandsImpl::GetInfoStatus(ServerContext* c, const Null* request, Info* reply) {
     reply->set_status(static_cast<yamp::Info_Status>(music.GetStatus()));
     return grpc::Status::OK;

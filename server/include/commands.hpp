@@ -12,6 +12,7 @@ using yamp::Title;
 using yamp::File;
 using yamp::Volume;
 using yamp::Info;
+using yamp::Offset;
 
 class CommandsImpl final : public yamp::Server::Service {
 public:
@@ -43,6 +44,10 @@ private:
     // Add commands
     grpc::Status AddFile(ServerContext* c, const File* request,Null* reply) override;
     grpc::Status AddFolder(ServerContext* c, const File* request,Null* reply) override;
+
+    // Time offset commands
+    grpc::Status GetRemainingTime(ServerContext* c, const Null* request, Offset* reply) override;
+    grpc::Status SetOffsetTime(ServerContext* c, const Offset* request, Null* reply) override;
 
     grpc::Status GetInfoStatus(ServerContext* c, const Null* request, Info* reply) override;
 

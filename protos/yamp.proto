@@ -30,6 +30,10 @@ service Server {
   rpc AddFile(File) returns (Null);
   rpc AddFolder(File) returns (Null);
 
+  // Time offset commands
+  rpc GetRemainingTime(Null) returns (Offset);
+  rpc SetOffsetTime(Offset) returns (Null);
+
   rpc GetInfoStatus(Null) returns(Info);
 }
 
@@ -46,6 +50,10 @@ message Title {
 
 message File {
 	string file = 1;
+}
+
+message Offset {
+  float offset = 1;
 }
 
 message Volume {
