@@ -16,7 +16,20 @@ import (
 )
 
 const (
-	config_file = "~/.config/yamp/yampc.yml"
+	config_file         = "~/.config/yamp/yampc.yml"
+	valid_main_commands = `
+		P		Play
+		p		Pause
+		n		Next
+		b		Back
+		C		Clear
+		g 		Get some metadata of the current song
+		s 		Sort commands
+		v 		Volume commands
+		i 		Info commands
+		f 		Filter commands
+		a 		Add commands
+		t 		Time commands`
 )
 
 type ConfStruct struct {
@@ -42,8 +55,15 @@ func canOpen(path string) bool {
 }
 
 func addCmd(b context.Context, c pb.ServerClient, cmd string) {
+	valid_commands := `
+		f 		Add a single file
+		F 		Add a folder
+		r 		Play a single file (clears the playlist and add that song)
+		R 		Play songs inside a folder (same as above but with a folder)`
+
 	if len(cmd) == 0 {
-		log.Fatal("A sub-option is required")
+		showHelp(valid_commands)
+		return
 	}
 
 	path := "/" + os.Args[2]
@@ -74,12 +94,18 @@ func addCmd(b context.Context, c pb.ServerClient, cmd string) {
 		check(err)
 		_, err = c.Play(b, &pb.Null{})
 		check(err)
+	default:
+		showHelp(valid_commands)
 	}
 }
 
 func parseFilterCmd(b context.Context, c pb.ServerClient, cmd string) {
+	valid_commands := `
+		a 		Filter by artist`
+
 	if len(cmd) == 0 {
-		log.Fatal("A sub-option is required")
+		showHelp(valid_commands)
+		return
 	}
 
 	switch cmd[0] {
@@ -87,7 +113,7 @@ func parseFilterCmd(b context.Context, c pb.ServerClient, cmd string) {
 		_, err := c.FilterArtist(b, &pb.Artist{Artist: os.Args[2]})
 		check(err)
 	default:
-		log.Fatal("Invalid sub-command")
+		return
 	}
 }
 
@@ -116,8 +142,13 @@ func parseVolumeSetCmd(b context.Context, c pb.ServerClient, cmd string) {
 }
 
 func parseVolumeCmd(b context.Context, c pb.ServerClient, cmd string) {
+	valid_commands := `
+		g 		Get volume
+		s 		Set volume`
+
 	if len(cmd) == 0 {
-		log.Fatal("A sub-option is required")
+		showHelp(valid_commands)
+		return
 	}
 
 	switch cmd[0] {
@@ -128,13 +159,18 @@ func parseVolumeCmd(b context.Context, c pb.ServerClient, cmd string) {
 	case 's':
 		parseVolumeSetCmd(b, c, os.Args[2])
 	default:
-		log.Fatal("Invalid command")
+		showHelp(valid_commands)
 	}
 }
 
 func parseSortCmd(b context.Context, c pb.ServerClient, cmd string) {
+	valid_commands := `
+		r 		Random sort
+		l		LLF sort`
+
 	if len(cmd) == 0 {
-		log.Fatal("A sub-option is required")
+		showHelp(valid_commands)
+		return
 	}
 
 	switch cmd[0] {
@@ -145,13 +181,19 @@ func parseSortCmd(b context.Context, c pb.ServerClient, cmd string) {
 		_, err := c.SortLLF(b, &pb.Null{})
 		check(err)
 	default:
-		log.Fatal("Invalid command")
+		return
 	}
 }
 
 func parseGetMetadataCmd(b context.Context, c pb.ServerClient, cmd string) {
+	valid_commands := `
+		a		Get artist
+		t 		Get title
+		f 		Get File`
+
 	if len(cmd) == 0 {
-		log.Fatal("A sub-option is required")
+		showHelp(valid_commands)
+		return
 	}
 
 	switch cmd[0] {
@@ -168,13 +210,16 @@ func parseGetMetadataCmd(b context.Context, c pb.ServerClient, cmd string) {
 		check(err)
 		fmt.Println(response.File)
 	default:
-		log.Fatal("Invalid command")
+		showHelp(valid_commands)
 	}
 }
 
 func parseInfoCmd(b context.Context, c pb.ServerClient, cmd string) {
+	valid_commands := `
+		s 		Get status`
 	if len(cmd) == 0 {
-		log.Fatal("A sub-option is required")
+		showHelp(valid_commands)
+		return
 	}
 
 	switch cmd[0] {
@@ -183,13 +228,18 @@ func parseInfoCmd(b context.Context, c pb.ServerClient, cmd string) {
 		check(err)
 		fmt.Println(response.Status)
 	default:
-		log.Fatal("Invalid command")
+		showHelp(valid_commands)
 	}
 }
 
 func parseTimeCmd(b context.Context, c pb.ServerClient, cmd string) {
+	valid_commands := `
+		g		Get remaining time
+		s 		Set offset
+		`
 	if len(cmd) == 0 {
-		log.Fatal("A sub-option is required")
+		showHelp(valid_commands)
+		return
 	}
 
 	switch cmd[0] {
@@ -203,7 +253,7 @@ func parseTimeCmd(b context.Context, c pb.ServerClient, cmd string) {
 		_, err = c.SetOffsetTime(b, &pb.Offset{Offset: float32(f)})
 		check(err)
 	default:
-		log.Fatal("Invalid command")
+		showHelp(valid_commands)
 	}
 }
 
@@ -239,8 +289,14 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 	case 't':
 		parseTimeCmd(b, c, cmd[1:])
 	default:
-		log.Fatal("Invalid command")
+		showHelp(valid_main_commands)
 	}
+}
+
+func showHelp(valid_commands string) {
+	fmt.Println("Invalid or no command")
+	fmt.Println("Valid comands are")
+	fmt.Println(valid_commands)
 }
 
 func Expand(path string) string {
@@ -257,7 +313,8 @@ func main() {
 	check(err)
 
 	if len(os.Args) < 2 {
-		log.Fatal("An argument is required")
+		showHelp(valid_main_commands)
+		return
 	}
 
 	// Set up a connection to the server.
