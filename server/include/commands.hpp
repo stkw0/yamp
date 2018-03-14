@@ -19,6 +19,7 @@ public:
 	CommandsImpl(Music& c) : music(c) {}
 
 private:
+    grpc::Status Exit(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Play(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Pause(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Next(ServerContext* c, const Null* request, Null* reply) override;

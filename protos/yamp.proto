@@ -4,6 +4,7 @@ package yamp;
 
 service Server {
   // Sends a greeting
+  rpc Exit(Null) returns (Null);
   rpc Play(Null) returns (Null);
   rpc Pause(Null) returns (Null);
   rpc Next(Null) returns (Null);

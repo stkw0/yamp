@@ -6,6 +6,11 @@
 
 #include "commands.hpp"
 
+grpc::Status CommandsImpl::Exit(ServerContext* c, const Null* request, Null* reply) {
+    music.SetStatus(Status::Exit);
+    return grpc::Status::OK;
+}
+
 grpc::Status CommandsImpl::Play(ServerContext* c, const Null* request, Null* reply) {
     music.SetStatus(Status::Playing);
     return grpc::Status::OK;

@@ -18,6 +18,7 @@ import (
 const (
 	config_file         = "~/.config/yamp/yampc.yml"
 	valid_main_commands = `
+		q		Quit
 		P		Play
 		p		Pause
 		n		Next
@@ -259,6 +260,9 @@ func parseTimeCmd(b context.Context, c pb.ServerClient, cmd string) {
 
 func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 	switch cmd[0] {
+	case 'q':
+		_, err := c.Exit(b, &pb.Null{})
+		check(err)
 	case 'P':
 		_, err := c.Play(b, &pb.Null{})
 		check(err)
