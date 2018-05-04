@@ -37,11 +37,6 @@ std::string Config::GetLogFile() const {
     return opt.logfile;
 }
 
-path Config::GetDir() const {
-    std::lock_guard<std::mutex> lock(config_mutex);
-    return opt.dir;
-}
-
 spdlog::level::level_enum Config::GetLogLevel() const {
     std::lock_guard<std::mutex> lock(config_mutex);
     return static_cast<spdlog::level::level_enum>(opt.loglevel);
@@ -56,7 +51,6 @@ void Config::LoadFile(const std::string& f) {
 
     if(auto e = config["pid_file"]) opt.pidfile = e.as<std::string>();
     if(auto e = config["log_file"]) opt.logfile = e.as<std::string>();
-    if(auto e = config["music_folder"]) opt.dir = e.as<std::string>();
     if(auto e = config["log_level"]) opt.loglevel = e.as<short>();
 
     if(auto e = config["port_number"]) opt.portnumber = e.as<unsigned>();
@@ -67,7 +61,6 @@ void Config::Store(const std::string& f) {
     YAML::Node config;
     config["pid_file"] = opt.pidfile;
     config["log_file"] = opt.logfile;
-    config["music_folder"] = opt.dir.c_str();
     config["log_level"] = opt.loglevel;
 
     config["port_number"] = opt.portnumber;
@@ -78,13 +71,6 @@ void Config::Store(const std::string& f) {
 }
 
 void Config::Load() {
-
-    // Try to autodetect music dir
-    // TODO: We should use libxdg to parse ~/.config/user-dirs.dirs (if exists)
-    // and get the default music dir.
-    path default_music(Expand("~/Music/"));
-    if(exists(default_music)) opt.dir = default_music.c_str();
-
     const auto config_file = CONFIG_FOLDER + "server.yml";
     try {
         LoadFile(config_file);
@@ -95,5 +81,4 @@ void Config::Load() {
 
     opt.pidfile = Expand(opt.pidfile);
     opt.logfile = Expand(opt.logfile);
-    opt.dir = Expand(opt.dir.c_str());
 }

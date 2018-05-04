@@ -21,7 +21,6 @@ public:
 	std::string getPidFile()	const;
 	std::string GetDbFile()		const;
 	std::string GetLogFile()	const;
-	path GetDir() const;
 	bool GetAutostart() const;
 	spdlog::level::level_enum GetLogLevel() const;
 
@@ -43,9 +42,6 @@ private:
 
 		//Log file
 		std::string logfile		= CONFIG_FOLDER+"log.txt";
-
-		//Location of the songs
-		path dir = ".";
 
 		short loglevel = 0;
 	}opt;

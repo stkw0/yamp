@@ -54,7 +54,6 @@ void Manager::StartServer() {
     // Start Music thread
     Music music;
 
-    music.GetList().LoadDir(conf.GetDir());
     std::thread mplayer([&music] { music.PlayList(); });
 
     // Start server
