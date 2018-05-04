@@ -16,7 +16,7 @@ using namespace boost::filesystem;
 
 static std::mutex song_mutex;
 
-Song::Song(path p) : extension(p.extension().c_str()), file(p.c_str()) {
+Song::Song(const path& p) : extension(p.extension().c_str()), file(p.c_str()) {
 }
 
 std::string Song::GetTitle() {

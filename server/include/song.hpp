@@ -13,7 +13,7 @@ using namespace boost::filesystem;
 class Song {
 public:
 	/// @brief Creates a Song of an absolute path
-	explicit Song(path p);
+	explicit Song(const path& p);
 
 	/// @brief Creates a temporary empty Song.
 	Song() =default;

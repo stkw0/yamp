@@ -11,7 +11,7 @@
 
 // Public functions
 
-void MusicList::LoadDir(path p) {
+void MusicList::LoadDir(const path& p) {
     if(!is_directory(p)) {
         throw std::runtime_error("Can not open the directory");
     }
@@ -25,10 +25,10 @@ void MusicList::LoadDir(path p) {
     }
 }
 
-void MusicList::LoadFile(const path pathSong) {
+void MusicList::LoadFile(const path& pathSong) {
     if(IsSupported(pathSong) && !is_directory(pathSong)) {
 
-        spdlog::get("global")->trace("Loaded {}", pathSong.c_str());
+        // spdlog::get("global")->trace("Loaded {}", pathSong.c_str());
 
         auto song = std::make_shared<Song>(pathSong);
         full_list.emplace_back(song);
