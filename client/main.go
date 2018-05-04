@@ -30,7 +30,8 @@ const (
 		i 		Info commands
 		f 		Filter commands
 		a 		Add commands
-		t 		Time commands`
+		t 		Time commands
+		L		Playlist commands`
 )
 
 type ConfStruct struct {
@@ -55,6 +56,21 @@ func canOpen(path string) bool {
 	return false
 }
 
+func getFullPath(rel_path string) string {
+	if rel_path[0] == '/' {
+		return rel_path
+	}
+
+	path := "/" + rel_path
+	if path == "/." || !canOpen(path) {
+		pwd, err := os.Getwd()
+		check(err)
+		path = pwd + "/" + path
+	}
+
+	return path
+}
+
 func addCmd(b context.Context, c pb.ServerClient, cmd string) {
 	valid_commands := `
 		f 		Add a single file
@@ -67,12 +83,7 @@ func addCmd(b context.Context, c pb.ServerClient, cmd string) {
 		return
 	}
 
-	path := "/" + os.Args[2]
-	if path == "/." || !canOpen(path) {
-		pwd, err := os.Getwd()
-		check(err)
-		path = pwd + "/" + path
-	}
+	path := getFullPath(os.Args[2])
 
 	switch cmd[0] {
 	case 'f':
@@ -258,6 +269,31 @@ func parseTimeCmd(b context.Context, c pb.ServerClient, cmd string) {
 	}
 }
 
+func parsePlaylistCmd(b context.Context, c pb.ServerClient, cmd string) {
+	valid_commands := `
+		l		Load playlist
+		s 		Save playlist
+		`
+
+	if len(cmd) == 0 {
+		showHelp(valid_commands)
+		return
+	}
+
+	path := getFullPath(os.Args[2])
+
+	switch cmd[0] {
+	case 'l':
+		_, err := c.LoadPlaylist(b, &pb.File{File: path})
+		check(err)
+	case 's':
+		_, err := c.SavePlaylist(b, &pb.File{File: path})
+		check(err)
+	default:
+		showHelp(valid_commands)
+	}
+}
+
 func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 	switch cmd[0] {
 	case 'q':
@@ -292,6 +328,8 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 		addCmd(b, c, cmd[1:])
 	case 't':
 		parseTimeCmd(b, c, cmd[1:])
+	case 'L':
+		parsePlaylistCmd(b, c, cmd[1:])
 	default:
 		showHelp(valid_main_commands)
 	}

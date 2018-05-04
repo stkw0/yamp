@@ -50,6 +50,10 @@ private:
     grpc::Status GetRemainingTime(ServerContext* c, const Null* request, Offset* reply) override;
     grpc::Status SetOffsetTime(ServerContext* c, const Offset* request, Null* reply) override;
 
+    // Playlist commands
+    grpc::Status LoadPlaylist(ServerContext* c, const File* request, Null* reply) override;
+    grpc::Status SavePlaylist(ServerContext* c, const File* request, Null* reply) override;
+
     grpc::Status GetInfoStatus(ServerContext* c, const Null* request, Info* reply) override;
 
    private:

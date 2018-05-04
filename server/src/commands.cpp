@@ -152,6 +152,25 @@ grpc::Status CommandsImpl::SetOffsetTime(ServerContext* c,
     return grpc::Status::OK;
 }
 
+// Playlist commands
+
+grpc::Status CommandsImpl::LoadPlaylist(ServerContext* c, const File* request, Null* reply) {
+    auto t = music.GetStatus();
+    music.SetStatus(Status::Stoped);
+
+    // File is the full path to the playlist
+    auto file = request->file();
+    music.GetList().LoadPlaylist(file);
+    music.SetStatus(t);
+    return grpc::Status::OK;
+}
+
+grpc::Status CommandsImpl::SavePlaylist(ServerContext* c, const File* request, Null* reply) {
+    auto file = request->file();
+    music.GetList().SavePlaylist(file);
+    return grpc::Status::OK;
+}
+
 grpc::Status CommandsImpl::GetInfoStatus(ServerContext* c, const Null* request, Info* reply) {
     reply->set_status(static_cast<yamp::Info_Status>(music.GetStatus()));
     return grpc::Status::OK;

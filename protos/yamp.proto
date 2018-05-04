@@ -35,6 +35,10 @@ service Server {
   rpc GetRemainingTime(Null) returns (Offset);
   rpc SetOffsetTime(Offset) returns (Null);
 
+  // Playlist commands 
+  rpc LoadPlaylist(File) returns (Null);
+  rpc SavePlaylist(File) returns (Null);
+
   rpc GetInfoStatus(Null) returns(Info);
 }
 
