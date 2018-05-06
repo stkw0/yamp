@@ -178,7 +178,8 @@ func parseVolumeCmd(b context.Context, c pb.ServerClient, cmd string) {
 func parseSortCmd(b context.Context, c pb.ServerClient, cmd string) {
 	valid_commands := `
 		r 		Random sort
-		l		LLF sort`
+		l		LLF sort
+		m 		MLF sort`
 
 	if len(cmd) == 0 {
 		showHelp(valid_commands)
@@ -192,8 +193,11 @@ func parseSortCmd(b context.Context, c pb.ServerClient, cmd string) {
 	case 'l':
 		_, err := c.SortLLF(b, &pb.Null{})
 		check(err)
+	case 'm':
+		_, err := c.SortMLF(b, &pb.Null{})
+		check(err)
 	default:
-		return
+		showHelp(valid_commands)
 	}
 }
 

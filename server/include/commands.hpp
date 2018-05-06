@@ -34,6 +34,7 @@ private:
     // Sort commands
     grpc::Status SortRandom(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status SortLLF(ServerContext* c, const Null* request, Null* reply) override;
+    grpc::Status SortMLF(ServerContext* c, const Null* request, Null* reply) override;
 
     // Volume commands
     grpc::Status VolumeGet(ServerContext* c, const Null* request, Volume* reply) override;

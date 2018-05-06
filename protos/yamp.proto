@@ -19,6 +19,7 @@ service Server {
   // Sort commands
   rpc SortRandom(Null) returns (Null);
   rpc SortLLF(Null) returns (Null);
+  rpc SortMLF(Null) returns (Null);
 
   // Volume commands
   rpc VolumeGet(Null) returns (Volume);

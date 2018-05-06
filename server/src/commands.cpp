@@ -73,6 +73,11 @@ grpc::Status CommandsImpl::SortLLF(ServerContext* c, const Null* request, Null* 
     return grpc::Status::OK;
 }
 
+grpc::Status CommandsImpl::SortMLF(ServerContext* c, const Null* request, Null* reply) {
+    music.GetList().Sort(Order::MLF);
+    return grpc::Status::OK;
+}
+
 // Volume commands
 
 grpc::Status CommandsImpl::VolumeGet(ServerContext* c, const Null* request, Volume* reply) {
