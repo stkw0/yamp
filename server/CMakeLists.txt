@@ -1,7 +1,7 @@
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(GRPC REQUIRED)
-find_package(SFML 2 REQUIRED SYSTEM AUDIO)
+find_package(SFML 2 REQUIRED COMPONENTS system audio)
 find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
 # TODO: Next upstream version will support it
