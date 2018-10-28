@@ -3,6 +3,7 @@
 #include <mutex>
 #include <thread>
 
+#include <SFML/Audio.hpp>
 #include <spdlog/spdlog.h>
 
 #include "music.hpp"
@@ -95,9 +96,12 @@ int Music::GetRemainingMilliseconds() {
 void Music::SetPlayingOffset(int ms) {
     // ms: Millisecond in the song to move the current offset
 
-    auto duration = music.getDuration().asMilliseconds();
-
-    if(ms > duration) ms = duration;
+    if(ms < 0) {
+        ms = 0;
+    } else {
+        auto duration = music.getDuration().asMilliseconds();
+        if(ms > duration) ms = duration;
+    }
 
     music.setPlayingOffset(sf::milliseconds(ms));
 
@@ -149,8 +153,6 @@ bool Music::OpenCurrent() {
     return true;
 }
 
-// TODO: SFML is not appropiate for a music player
-// in a future we should use another library like ffmpeg or OpenAL
 void Music::Reproduce() {
     spdlog::get("global")->info("Playing: {}", song.GetFile());
 

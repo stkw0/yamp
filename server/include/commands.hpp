@@ -24,6 +24,7 @@ private:
     grpc::Status Pause(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Next(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Back(ServerContext* c, const Null* request, Null* reply) override;
+    grpc::Status Restart(ServerContext* c, const Null* request, Null* reply) override;
     grpc::Status Clear(ServerContext* c, const Null* request, Null* reply) override;
 
     // Metadata commands

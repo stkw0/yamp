@@ -6,7 +6,6 @@
 #include <atomic>
 
 #include <boost/filesystem.hpp>
-#include <SFML/Audio.hpp>
 
 #include "musiclist.hpp"
 #include "sound.hpp"

@@ -35,6 +35,12 @@ grpc::Status CommandsImpl::Back(ServerContext* c, const Null* request, Null* rep
     return grpc::Status::OK;
 }
 
+grpc::Status CommandsImpl::Restart(ServerContext* c, const Null* request, Null* reply) {
+    music.SetStatus(Status::Stoped);
+    music.SetStatus(Status::Playing);
+    return grpc::Status::OK;
+}
+
 grpc::Status CommandsImpl::Clear(ServerContext* c, const Null* request, Null* reply) {
     music.SetStatus(Status::Stoped);
     music.GetList().GetSongList().clear();

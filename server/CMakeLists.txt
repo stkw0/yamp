@@ -18,7 +18,7 @@ FILE(GLOB_RECURSE SRC src/*.cpp)
 
 include_directories(${PROTO_SRC_DIR} include)
 
-add_definitions(-DSPDLOG_NO_DATETIME -DSPDLOG_NO_THREAD_ID -DSPDLOG_NO_NAME)
+add_definitions(-DSPDLOG_NO_DATETIME -DSPDLOG_NO_THREAD_ID -DSPDLOG_NO_NAME -DSPDLOG_FMT_EXTERNAL)
 	#-DSPDLOG_FMT_EXTERNAL) FIXME: Link errors
 
 add_executable(yampd

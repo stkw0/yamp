@@ -7,6 +7,7 @@
 #include <boost/filesystem.hpp>
 #include <fmt/format.h>
 #include <grpc++/grpc++.h>
+#include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
 
 #include "commands.hpp"

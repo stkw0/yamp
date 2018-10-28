@@ -23,6 +23,7 @@ const (
 		p		Pause
 		n		Next
 		b		Back
+		R		Restart
 		C		Clear
 		g 		Get some metadata of the current song
 		s 		Sort commands
@@ -314,6 +315,9 @@ func parseCmd(b context.Context, c pb.ServerClient, cmd string) {
 		check(err)
 	case 'b':
 		_, err := c.Back(b, &pb.Null{})
+		check(err)
+	case 'R':
+		_, err := c.Restart(b, &pb.Null{})
 		check(err)
 	case 'C':
 		_, err := c.Clear(b, &pb.Null{})

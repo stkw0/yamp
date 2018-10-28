@@ -9,6 +9,7 @@ service Server {
   rpc Pause(Null) returns (Null);
   rpc Next(Null) returns (Null);
   rpc Back(Null) returns (Null);
+  rpc Restart(Null) returns (Null);
   rpc Clear(Null) returns (Null);
 
   // Metadata commands
