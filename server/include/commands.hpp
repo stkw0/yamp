@@ -1,6 +1,6 @@
 #pragma once
 
-#include <grpc++/grpc++.h>
+#include <grpcpp/grpcpp.h>
 
 #include "music.hpp"
 #include "yamp.grpc.pb.h"
